@@ -23,7 +23,7 @@ export function SoundToggle({
       type="button"
       variant="outline"
       className={cn(
-        "auth-sound h-auto border-white/20 bg-white/10 hover:bg-white/20",
+        "auth-sound  border-white/20 bg-white/10 hover:bg-white/20",
         className
       )}
       aria-pressed={isOn}
