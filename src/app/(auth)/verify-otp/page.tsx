@@ -8,7 +8,7 @@ import { AuthFooter } from "@/components/features/auth/auth-footer"
 import { AuthHero } from "@/components/features/auth/auth-hero"
 import { AuthPanel } from "@/components/features/auth/auth-panel"
 import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button"
-import { AuthShell } from "@/components/features/auth/auth-shell"
+import { Shell } from "@/components/layout/shell"
 
 const handleVerifyOtp = async (event: FormEvent<HTMLFormElement>) => {
   event.preventDefault()
@@ -23,7 +23,7 @@ const handleVerifyOtp = async (event: FormEvent<HTMLFormElement>) => {
 
 export default function VerifyOtp() {
   return (
-    <AuthShell>
+    <Shell>
       <AuthHero />
 
       <AuthPanel title="Verify OTP">
@@ -57,6 +57,6 @@ export default function VerifyOtp() {
         actionLabel="Back to Login"
         actionHref="/login"
       />
-    </AuthShell>
+    </Shell>
   )
 }

@@ -9,7 +9,7 @@ import { AuthFooter } from "@/components/features/auth/auth-footer"
 import { AuthHero } from "@/components/features/auth/auth-hero"
 import { AuthPanel } from "@/components/features/auth/auth-panel"
 import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button"
-import { AuthShell } from "@/components/features/auth/auth-shell"
+import { Shell } from "@/components/layout/shell"
 import { createClient } from "@/lib/supabase/client"
 
 type StatusState = { type: "idle" | "error" | "success"; message: string }
@@ -57,7 +57,7 @@ export default function ForgotPassword() {
   }
 
   return (
-    <AuthShell>
+    <Shell>
       <AuthHero />
 
       <AuthPanel title="Reset Password">
@@ -96,6 +96,6 @@ export default function ForgotPassword() {
         actionLabel="Back to Login"
         actionHref="/login"
       />
-    </AuthShell>
+    </Shell>
   )
 }

@@ -9,7 +9,7 @@ import { AuthFooter } from "@/components/features/auth/auth-footer";
 import { AuthHero } from "@/components/features/auth/auth-hero";
 import { AuthPanel } from "@/components/features/auth/auth-panel";
 import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button";
-import { AuthShell } from "@/components/features/auth/auth-shell";
+import { Shell } from "@/components/layout/shell";
 
 import { createClient } from "@/lib/supabase/client";
 
@@ -73,7 +73,7 @@ export default function Signup() {
     setIsSubmitting(false);
   };
   return (
-    <AuthShell>
+    <Shell>
       <AuthHero />
 
       <AuthPanel title="Player 1 Signup">
@@ -142,6 +142,6 @@ export default function Signup() {
         actionHref="/login"
       />
 
-    </AuthShell>
+    </Shell>
   );
 }

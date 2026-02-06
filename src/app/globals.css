@@ -4,6 +4,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -126,15 +132,15 @@
 
 @layer components {
   .auth-card {
-    @apply rounded-[28px] border-4 border-black bg-white shadow-[10px_10px_0px_#000];
+    @apply  border-4 border-black bg-white shadow-[8px_8px_0px_#000];
   }
 
   .auth-panel {
-    @apply rounded-[32px] border-4 border-black bg-white shadow-[10px_10px_0px_#000];
+    @apply  border-4 border-black bg-white shadow-[8px_8px_0px_#000];
   }
 
   .auth-field {
-    @apply rounded-2xl border-2 border-slate-200 px-5 py-4 shadow-[inset_0_0_0_1px_#fff];
+    @apply  border-2 border-slate-200 px-5 py-4 shadow-[inset_0_0_0_1px_#fff];
   }
 
   .auth-field-label {
@@ -150,15 +156,15 @@
   }
 
   .auth-bracket {
-    @apply inline-flex h-6 w-6 items-center justify-center rounded-md border border-slate-300 bg-white text-xs font-semibold text-slate-500;
+    @apply inline-flex h-6 w-6 items-center justify-center  border border-slate-300 bg-white text-xs font-semibold text-slate-500;
   }
 
   .auth-cta {
-    @apply rounded-lg border-2 border-black bg-[#f28b1c] px-4 py-2 text-[0.7rem] uppercase tracking-[0.3em] text-white shadow-[6px_6px_0px_#000] transition;
+    @apply  border-2 border-black bg-[#f28b1c] px-4 py-2 text-[0.7rem] uppercase tracking-[0.3em] text-white shadow-[8px_8px_0px_#000] transition;
   }
 
   .auth-secondary {
-    @apply rounded-xl border-2 border-black bg-white px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-900 shadow-[4px_4px_0px_#000] transition;
+    @apply  border-2 border-black bg-white px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-900 shadow-[4px_4px_0px_#000] transition;
   }
 
   .auth-divider {
@@ -170,6 +176,6 @@
   }
 
   .auth-sound-icon {
-    @apply flex h-5 w-5 items-center justify-center rounded border border-white/10 bg-white/15 text-white;
+    @apply flex h-5 w-5 items-center justify-center  border border-white/10 bg-white/15 text-white;
   }
 }

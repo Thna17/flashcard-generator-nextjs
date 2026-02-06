@@ -8,7 +8,7 @@ import { AuthFooter } from "@/components/features/auth/auth-footer";
 import { AuthHero } from "@/components/features/auth/auth-hero";
 import { AuthPanel } from "@/components/features/auth/auth-panel";
 import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button";
-import { AuthShell } from "@/components/features/auth/auth-shell";
+import { Shell } from "@/components/layout/shell";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -43,7 +43,7 @@ export default function Login() {
 };
 
   return (
-    <AuthShell>
+    <Shell>
       <AuthHero />
 
       <AuthPanel title="Player 1 Login">
@@ -90,6 +90,6 @@ export default function Login() {
         actionHref="/forgot-password"
       />
 
-    </AuthShell>
+    </Shell>
   );
 }
