@@ -1,4 +1,4 @@
-import { pressStart } from "@/components/features/auth/auth-fonts"
+import { pressStart } from "@/components/font"
 import { SoundToggle } from "@/components/features/auth/sound-toggle"
 
 export function AuthHeader() {

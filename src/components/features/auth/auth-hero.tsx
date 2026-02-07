@@ -1,4 +1,4 @@
-import { pressStart } from "@/components/features/auth/auth-fonts"
+import { pressStart } from "@/components/font"
 
 type AuthHeroProps = {
   title?: string

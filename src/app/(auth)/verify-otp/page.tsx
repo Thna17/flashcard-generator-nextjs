@@ -7,8 +7,8 @@ import { AuthField } from "@/components/features/auth/auth-field"
 import { AuthFooter } from "@/components/features/auth/auth-footer"
 import { AuthHero } from "@/components/features/auth/auth-hero"
 import { AuthPanel } from "@/components/features/auth/auth-panel"
-import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button"
 import { Shell } from "@/components/layout/shell"
+import { Button } from "@/components/ui/button"
 
 const handleVerifyOtp = async (event: FormEvent<HTMLFormElement>) => {
   event.preventDefault()
@@ -46,7 +46,7 @@ export default function VerifyOtp() {
               autoComplete: "one-time-code",
             }}
           />
-          <AuthPrimaryButton type="submit">Verify Code</AuthPrimaryButton>
+          <Button type="submit" variant="cta" size="cta">Verify Code</Button>
         </form>
       </AuthPanel>
 

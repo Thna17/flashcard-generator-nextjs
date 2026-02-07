@@ -8,8 +8,8 @@ import { AuthField } from "@/components/features/auth/auth-field";
 import { AuthFooter } from "@/components/features/auth/auth-footer";
 import { AuthHero } from "@/components/features/auth/auth-hero";
 import { AuthPanel } from "@/components/features/auth/auth-panel";
-import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button";
 import { Shell } from "@/components/layout/shell";
+import { Button } from "@/components/ui/button";
 
 import { createClient } from "@/lib/supabase/client";
 
@@ -116,7 +116,7 @@ export default function Signup() {
               autoComplete: "new-password",
             }}
           />
-          <AuthPrimaryButton type="submit">Create Account</AuthPrimaryButton>
+          <Button type="submit" variant="cta" size="cta">Create Account</Button>
           {status.message ? (
             <p
               className={

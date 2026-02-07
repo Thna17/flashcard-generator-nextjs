@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 
-import { spaceGrotesk } from "@/components/features/auth/auth-fonts"
+import { spaceGrotesk } from "@/components/font"
 import { AuthHeader } from "@/components/features/auth/auth-header"
 import { cn } from "@/lib/utils"
 

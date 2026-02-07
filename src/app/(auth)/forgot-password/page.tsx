@@ -8,8 +8,8 @@ import { AuthField } from "@/components/features/auth/auth-field"
 import { AuthFooter } from "@/components/features/auth/auth-footer"
 import { AuthHero } from "@/components/features/auth/auth-hero"
 import { AuthPanel } from "@/components/features/auth/auth-panel"
-import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button"
 import { Shell } from "@/components/layout/shell"
+import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 
 type StatusState = { type: "idle" | "error" | "success"; message: string }
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
               autoComplete: "email",
             }}
           />
-          <AuthPrimaryButton type="submit">Send Reset Link</AuthPrimaryButton>
+          <Button type="submit" variant="cta" size="cta">Send Reset Link</Button>
           {status.message ? (
             <p
               className={

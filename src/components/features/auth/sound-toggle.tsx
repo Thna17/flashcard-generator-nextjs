@@ -22,6 +22,7 @@ export function SoundToggle({
     <Button
       type="button"
       variant="outline"
+      size="sm"
       className={cn(
         "auth-sound  border-white/20 bg-white/10 hover:bg-white/20",
         className

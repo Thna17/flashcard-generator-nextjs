@@ -7,8 +7,8 @@ import { AuthField } from "@/components/features/auth/auth-field";
 import { AuthFooter } from "@/components/features/auth/auth-footer";
 import { AuthHero } from "@/components/features/auth/auth-hero";
 import { AuthPanel } from "@/components/features/auth/auth-panel";
-import { AuthPrimaryButton } from "@/components/features/auth/auth-primary-button";
 import { Shell } from "@/components/layout/shell";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -66,7 +66,8 @@ export default function Login() {
               autoComplete: "current-password",
             }}
           />
-          <AuthPrimaryButton type="submit">Press Start</AuthPrimaryButton>
+          <Button type="submit" variant="cta" size="cta">PRESS START</Button>
+
           {status.type === "error" && (
             <p className="mt-4 text-sm text-red-600">{status.message}</p>
           )}

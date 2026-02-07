@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 
-import { pressStart } from "@/components/features/auth/auth-fonts"
+import { pressStart } from "@/components/font"
 
 type AuthPanelProps = {
   title: string

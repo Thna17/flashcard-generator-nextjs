@@ -159,14 +159,6 @@
     @apply inline-flex h-6 w-6 items-center justify-center  border border-slate-300 bg-white text-xs font-semibold text-slate-500;
   }
 
-  .auth-cta {
-    @apply  border-2 border-black bg-[#f28b1c] px-4 py-2 text-[0.7rem] uppercase tracking-[0.3em] text-white shadow-[8px_8px_0px_#000] transition;
-  }
-
-  .auth-secondary {
-    @apply  border-2 border-black bg-white px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-900 shadow-[4px_4px_0px_#000] transition;
-  }
-
   .auth-divider {
     @apply h-1 w-full max-w-2xl bg-black ;
   }
