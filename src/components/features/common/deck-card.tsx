@@ -1,6 +1,7 @@
 import { pressStart } from "@/components/font";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Progress } from "./progress";
 
 export type DeckItem = {
   name: string;
@@ -23,8 +24,8 @@ export function DeckCard({
   actionPath = "/",
   actionLabel = "START GAME",
 }: DeckCardProps) {
-  const filledSegments = Math.round(deck.progress / 10);
   const editPath = `/decks/${encodeURIComponent(deck.name)}/edit`;
+  const missionPath = `/missions/${encodeURIComponent(deck.name)}`;
 
   return (
     <div
@@ -32,17 +33,7 @@ export function DeckCard({
         isActive ? "bg-[#fff4e6] shadow-[12px_12px_0px_#000]" : ""
       }`}
     >
-      {isActive ? (
-        <div className="flex items-center gap-2">
-          <span className="rounded-md border-2 border-black bg-[#f28b1c] px-2 py-1 text-[0.45rem] font-semibold uppercase tracking-[0.35em] text-black">
-            ACTIVE
-          </span>
-          <span className="text-xs font-semibold text-slate-700">
-            Ready to play
-          </span>
-        </div>
-      ) : null}
-      <div className="h-3 w-full rounded-md bg-slate-200" />
+      <div className="h-3 w-full rounded-md bg-slate-300" />
       <div className="flex items-center justify-between rounded-md border-2 border-black bg-black px-4 py-2 text-white">
         <span
           className={`${pressStart.className} text-[0.55rem] uppercase tracking-[0.3em]`}
@@ -79,25 +70,7 @@ export function DeckCard({
           </svg>
         )}
       </div>
-      <div className="flex items-center gap-3">
-        <div className="flex-1 rounded-md border-2 border-black bg-white px-2 py-1">
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 10 }).map((_, index) => (
-              <span
-                key={`${deck.name}-seg-${index}`}
-                className={`h-2 flex-1 rounded-[2px] ${
-                  index < filledSegments ? "bg-[#f28b1c]" : "bg-white"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-        <span
-          className={`${pressStart.className} text-[0.6rem] uppercase tracking-[0.2em] text-slate-700`}
-        >
-          {deck.progress}%
-        </span>
-      </div>
+      <Progress name={deck.name} progress={deck.progress} />
       <div className="flex items-center justify-center gap-3">
         <form action={actionPath} method="get">
           {query ? <input type="hidden" name="q" value={query} /> : null}
@@ -105,13 +78,13 @@ export function DeckCard({
           <Button
             type="submit"
             variant="cta"
-            size="cta"
+            size="sm"
             className="w-full max-w-[180px]"
           >
-            {actionLabel}
+            <Link href={missionPath}>{actionLabel}</Link>
           </Button>
         </form>
-        <Button asChild variant="outline" size="cta">
+        <Button asChild variant="outline" size="sm">
           <Link href={editPath}>EDIT</Link>
         </Button>
       </div>

@@ -4,13 +4,13 @@ import { pressStart } from "@/components/font";
 import { Shell } from "@/components/layout/shell";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/features/home/dashboard-header";
-import { NewDeck } from "@/components/features/deck/new-deck";
 import { DeckPageHeader } from "@/components/features/deck/deck-page-header";
 import { CurrentCardItem } from "@/components/features/deck/current-card-item";
 import { StatsCard } from "@/components/features/common/stats-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { RetroDropdown } from "@/components/features/common/retro-dropdown";
 
 type EditDeckPageProps = {
   params: Promise<{
@@ -61,8 +61,8 @@ export default async function EditDeckPage({ params }: EditDeckPageProps) {
     >
       <DeckPageHeader title="Edit Deck" />
 
-      <NewDeck title="DECK CONFIGURATION (METADATA)" saveLabel="Update Deck">
-        <div className="grid gap-6 lg:grid-cols-3">
+      <RetroDropdown title="DECK CONFIGURATION (METADATA)" defaultOpen={true}>
+        <div className="grid gap-6 lg:grid-cols-3 mt-6">
           <StatsCard
             label="TITLE"
             name="title"
@@ -92,21 +92,38 @@ export default async function EditDeckPage({ params }: EditDeckPageProps) {
             ]}
           />
         </div>
-      </NewDeck>
+        <div className="flex justify-end mt-6">
+          <Button type="submit" variant="cta" size="cta">
+            Update Deck
+          </Button>
+        </div>
+      </RetroDropdown>
 
-      <NewDeck title="CARD EDITOR (UPDATE DATA)">
-        <FieldGroup className="w-full rounded-none border-4 border-black bg-white p-8 shadow-[8px_8px_0px_#000]">
+      <RetroDropdown title="CARD EDITOR (INSERT DATA)" defaultOpen={true}>
+        <FieldGroup className="w-full mt-6 rounded-none border-4 border-black bg-white p-8 shadow-[8px_8px_0px_#000]">
           <Field>
-            <FieldLabel htmlFor="edit-card-front" className={`${pressStart.className}`}>
+            <FieldLabel
+              htmlFor="edit-card-front"
+              className={`${pressStart.className}`}
+            >
               Front
             </FieldLabel>
-            <Input id="edit-card-front" placeholder="What is the virtual DOM?" />
+            <Input
+              id="edit-card-front"
+              placeholder="What is the virtual DOM?"
+            />
           </Field>
           <Field>
-            <FieldLabel htmlFor="edit-card-back" className={`${pressStart.className}`}>
+            <FieldLabel
+              htmlFor="edit-card-back"
+              className={`${pressStart.className}`}
+            >
               Back
             </FieldLabel>
-            <Input id="edit-card-back" placeholder="A lightweight copy of the actual DOM." />
+            <Input
+              id="edit-card-back"
+              placeholder="A lightweight copy of the actual DOM."
+            />
           </Field>
           <div>
             <Button variant="cta" size="cta" type="submit">
@@ -114,10 +131,10 @@ export default async function EditDeckPage({ params }: EditDeckPageProps) {
             </Button>
           </div>
         </FieldGroup>
-      </NewDeck>
+      </RetroDropdown>
 
-      <NewDeck title="CURRENT CARDS (CART_DATA: 24)">
-        <div className="flex flex-col gap-5">
+      <RetroDropdown title="CURRENT CARDS (CART_DATA: 24)" defaultOpen={true}>
+        <div className="flex flex-col gap-5 mt-6">
           {currentCards.map((card, idx) => (
             <CurrentCardItem
               key={card.id}
@@ -127,7 +144,7 @@ export default async function EditDeckPage({ params }: EditDeckPageProps) {
             />
           ))}
         </div>
-      </NewDeck>
+      </RetroDropdown>
     </Shell>
   );
 }

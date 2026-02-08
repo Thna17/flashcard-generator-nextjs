@@ -6,7 +6,6 @@ type HomeHeroProps = {
   tagline: string;
   stats: StatsCardProps[];
   activeDeck?: string;
-  showTaglineIcon?: boolean;
 };
 
 export function HomeHero({
@@ -14,7 +13,6 @@ export function HomeHero({
   tagline,
   stats,
   activeDeck,
-  showTaglineIcon = true,
 }: HomeHeroProps) {
   return (
     <div className="relative w-full overflow-hidden bg-[#d6d2c9] px-6 py-8 sm:px-10 sm:py-10">

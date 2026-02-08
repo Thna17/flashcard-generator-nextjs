@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     return NextResponse.next();
   }
-  let res = NextResponse.next({
+  const res = NextResponse.next({
     request: {
       headers: req.headers,
     },
@@ -54,4 +54,3 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 }
-

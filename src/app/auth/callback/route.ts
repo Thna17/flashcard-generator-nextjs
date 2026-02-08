@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   const nextPath = requestUrl.searchParams.get("next")
   const safeNextPath = nextPath && nextPath.startsWith("/") ? nextPath : "/"
 
-  let response = NextResponse.redirect(new URL(safeNextPath, request.url))
+  const response = NextResponse.redirect(new URL(safeNextPath, request.url))
 
   if (!code) {
     return response

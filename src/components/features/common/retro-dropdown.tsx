@@ -1,30 +1,21 @@
 "use client";
 
 import { useState } from "react";
-
 import { pressStart } from "@/components/font";
-import { DeckCard, type DeckItem } from "@/components/features/common/deck-card";
-import { NewGameCard } from "@/components/features/common/new-game-card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-type HomeDeckSectionProps = {
-  decks: DeckItem[];
-  query?: string;
-  activeDeck?: string;
+type RetroDropdownProps = {
   title?: string;
   defaultOpen?: boolean;
-  actionPath?: string;
+  children: React.ReactNode;
 };
 
-export function HomeDeckSection({
-  decks,
-  query,
-  activeDeck,
+export function RetroDropdown({
   title = "DECK CONFIGURATION (METADATA)",
+  children,
   defaultOpen = true,
-  actionPath = "/",
-}: HomeDeckSectionProps) {
+}: RetroDropdownProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
@@ -62,32 +53,9 @@ export function HomeDeckSection({
       </DropdownMenu>
 
       {isOpen ? (
-        <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          <NewGameCard />
-
-          {decks.length === 0 ? (
-            <div className="auth-card col-span-full flex flex-col items-center justify-center gap-3 rounded-none px-6 py-10 text-center shadow-[8px_8px_0px_#000]">
-              <span
-                className={`${pressStart.className} text-[0.7rem] uppercase tracking-[0.35em] text-zinc-700`}
-              >
-                No decks found
-              </span>
-              <p className="text-sm text-slate-700">
-                Try another search keyword.
-              </p>
-            </div>
-          ) : null}
-
-          {decks.map((deck) => (
-            <DeckCard
-              key={deck.name}
-              deck={deck}
-              isActive={activeDeck === deck.name}
-              query={query}
-              actionPath={actionPath}
-            />
-          ))}
-        </div>
+        <>
+        {children}
+        </>
       ) : null}
     </div>
   );
