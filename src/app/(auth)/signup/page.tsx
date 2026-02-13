@@ -75,7 +75,6 @@ export default function Signup() {
   return (
     <Shell>
       <AuthHero />
-
       <AuthPanel title="Player 1 Signup">
         <form
           className="mt-8 flex flex-col gap-6"

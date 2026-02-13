@@ -20,6 +20,47 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Drizzle ORM Setup
+
+1. Copy `.env.example` values into `.env.local`.
+2. Set `DATABASE_URL` to your Supabase PostgreSQL connection string.
+3. Verify connectivity:
+
+```bash
+npm run db:check
+```
+
+4. Generate migration files from `src/db/schema.ts`:
+
+```bash
+npm run db:generate
+```
+
+5. Apply migrations:
+
+```bash
+npm run db:migrate
+```
+
+6. Open Drizzle Studio:
+
+```bash
+npm run db:studio
+```
+
+## Supabase Auth User Sync (Recommended)
+
+Use `auth.users` as the only authentication source, and keep app user data in `public.users`.
+
+Apply this SQL once in Supabase SQL Editor:
+
+- `supabase/sql/001_users_from_auth.sql`
+
+What it does:
+- Auto-creates/updates `public.users` when users sign up in Supabase Auth.
+- Backfills missing `users` rows for existing auth users.
+- Enables RLS so users can only access their own user row.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
