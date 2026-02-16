@@ -26,7 +26,8 @@ export default function Login() {
 
   if (!email || !password) return;
 
-  // TODO: use createClient() and supabase.auth.signInWithPassword({ email, password })
+  setIsSubmitting(true);
+
   const supabase = createClient();
   const { data, error } = await supabase.auth.signInWithPassword({email, password});
 
@@ -39,7 +40,10 @@ export default function Login() {
   }
   if (data.session) {
     router.push("/");
+    return;
   }
+
+  setIsSubmitting(false);
 };
 
   return (

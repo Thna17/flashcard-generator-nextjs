@@ -4,28 +4,31 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "./progress";
 
 export type DeckItem = {
+  id: number;
   name: string;
   progress: number;
   visibility: "public" | "locked";
+  ownerLabel?: string;
 };
 
 type DeckCardProps = {
   deck: DeckItem;
   isActive?: boolean;
-  query?: string;
-  actionPath?: string;
   actionLabel?: string;
+  canEdit?: boolean;
+  contextLabel?: string;
 };
 
 export function DeckCard({
   deck,
   isActive = false,
-  query,
-  actionPath = "/",
-  actionLabel = "START GAME",
+  actionLabel = "STUDY",
+  canEdit = true,
+  contextLabel,
 }: DeckCardProps) {
-  const editPath = `/decks/${encodeURIComponent(deck.name)}/edit`;
-  const missionPath = `/missions/${encodeURIComponent(deck.name)}`;
+  const deckIdentifier = String(deck.id);
+  const editPath = `/decks/${encodeURIComponent(deckIdentifier)}/edit`;
+  const missionPath = `/missions/${encodeURIComponent(deckIdentifier)}`;
 
   return (
     <div
@@ -34,6 +37,21 @@ export function DeckCard({
       }`}
     >
       <div className="h-3 w-full rounded-md bg-slate-300" />
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span
+          className={`${pressStart.className} text-[0.45rem] uppercase tracking-[0.2em] text-zinc-700`}
+        >
+          {contextLabel ?? (canEdit ? "MY DECK" : "PUBLIC DECK")}
+        </span>
+        {!canEdit && deck.ownerLabel ? (
+          <span
+            className={`${pressStart.className} text-[0.45rem] uppercase tracking-[0.16em] text-zinc-700`}
+          >
+            BY {deck.ownerLabel}
+          </span>
+        ) : null}
+      </div>
+
       <div className="flex items-center justify-between rounded-md border-2 border-black bg-black px-4 py-2 text-white">
         <span
           className={`${pressStart.className} text-[0.55rem] uppercase tracking-[0.3em]`}
@@ -71,22 +89,20 @@ export function DeckCard({
         )}
       </div>
       <Progress name={deck.name} progress={deck.progress} />
-      <div className="flex items-center justify-center gap-3">
-        <form action={actionPath} method="get">
-          {query ? <input type="hidden" name="q" value={query} /> : null}
-          <input type="hidden" name="active" value={deck.name} />
-          <Button
-            type="submit"
-            variant="cta"
-            size="sm"
-            className="w-full max-w-[180px]"
-          >
-            <Link href={missionPath}>{actionLabel}</Link>
-          </Button>
-        </form>
-        <Button asChild variant="outline" size="sm">
-          <Link href={editPath}>EDIT</Link>
+      <div className={`flex items-center justify-center ${canEdit ? "gap-3" : ""}`}>
+        <Button
+          asChild
+          variant="cta"
+          size="sm"
+          className={canEdit ? "w-full max-w-[180px]" : "w-full"}
+        >
+          <Link href={missionPath}>{actionLabel}</Link>
         </Button>
+        {canEdit ? (
+          <Button asChild variant="outline" size="sm">
+            <Link href={editPath}>EDIT</Link>
+          </Button>
+        ) : null}
       </div>
     </div>
   );

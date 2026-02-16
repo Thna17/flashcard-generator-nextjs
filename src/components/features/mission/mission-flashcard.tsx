@@ -1,18 +1,18 @@
 import { RotateCcw } from "lucide-react";
 
 import { pressStart, spaceGrotesk } from "@/components/font";
-import { MissionCard } from "@/lib/missions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { MissionBoardCard } from "./mission-board";
 
 type MissionFlashcardProps = {
-  card: MissionCard | null;
+  card: MissionBoardCard | null;
   cardNumber: number;
   totalCards: number;
   isFlipped: boolean;
   onReveal: () => void;
   onFlipBack: () => void;
-  onAnswer: (answer: "TRUE" | "FALSE") => void;
+  onAnswer: (answer: "HIT" | "MISS") => void;
 };
 
 export function MissionFlashcard({
@@ -89,11 +89,11 @@ export function MissionFlashcard({
             </CardContent>
             <div className="pt-4">
               <div className="flex justify-center gap-4 sm:gap-8">
-                <Button variant="cta" size="cta" onClick={() => onAnswer("TRUE")}>
-                  TRUE
+                <Button variant="cta" size="cta" onClick={() => onAnswer("HIT")}>
+                  CHECK
                 </Button>
-                <Button variant="cta" size="cta" onClick={() => onAnswer("FALSE")}>
-                  FALSE
+                <Button variant="cta" size="cta" onClick={() => onAnswer("MISS")}>
+                  MISS
                 </Button>
               </div>
             </div>

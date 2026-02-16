@@ -3,25 +3,38 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { getMissionBySlug } from "@/lib/missions";
-
 import { MissionBoardHeader } from "./mission-board-header";
 import { MissionFlashcard } from "./mission-flashcard";
 
-type MissionAnswer = "TRUE" | "FALSE";
+type MissionAnswer = "HIT" | "MISS";
 
-export function MissionBoard({ missionSlug }: { missionSlug: string }) {
+export type MissionBoardCard = {
+  id: string;
+  front: string;
+  back: string;
+};
+
+type MissionBoardProps = {
+  missionSlug: string;
+  missionTitle: string;
+  cards: MissionBoardCard[];
+};
+
+export function MissionBoard({ missionSlug, missionTitle, cards }: MissionBoardProps) {
   const router = useRouter();
-  const mission = useMemo(() => getMissionBySlug(missionSlug), [missionSlug]);
-  const cards = mission?.cards ?? [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [answers, setAnswers] = useState<Record<string, MissionAnswer>>({});
 
-  const currentCard = cards[currentIndex] ?? null;
+  const normalizedCards = useMemo(() => cards, [cards]);
+
+  const currentCard = normalizedCards[currentIndex] ?? null;
   const answeredCount = Object.keys(answers).length;
-  const totalCards = cards.length;
+  const totalCards = normalizedCards.length;
+  const totalLevels = Math.max(totalCards, 1);
+  const currentLevel = totalCards === 0 ? 0 : Math.min(totalLevels, currentIndex + 1);
+  const missionProgress = totalCards > 0 ? Math.round((answeredCount / totalCards) * 100) : 0;
 
   function handleReveal() {
     setIsFlipped(true);
@@ -32,7 +45,7 @@ export function MissionBoard({ missionSlug }: { missionSlug: string }) {
   }
 
   function handleAnswer(answer: MissionAnswer) {
-    if (!currentCard || !mission) {
+    if (!currentCard) {
       return;
     }
 
@@ -43,7 +56,7 @@ export function MissionBoard({ missionSlug }: { missionSlug: string }) {
     const nextAnsweredCount = Object.keys(nextAnswers).length;
 
     if (totalCards > 0 && nextAnsweredCount >= totalCards) {
-      const hits = Object.values(nextAnswers).filter((item) => item === "TRUE").length;
+      const hits = Object.values(nextAnswers).filter((item) => item === "HIT").length;
       const misses = totalCards - hits;
       const accuracy = Math.round((hits / totalCards) * 100);
       const params = new URLSearchParams({
@@ -53,7 +66,7 @@ export function MissionBoard({ missionSlug }: { missionSlug: string }) {
         accuracy: String(accuracy),
       });
 
-      router.push(`/missions/${encodeURIComponent(mission.slug)}/summary?${params.toString()}`);
+      router.push(`/missions/${encodeURIComponent(missionSlug)}/summary?${params.toString()}`);
       return;
     }
 
@@ -63,17 +76,13 @@ export function MissionBoard({ missionSlug }: { missionSlug: string }) {
     setCurrentIndex((prev) => Math.min(prev + 1, Math.max(totalCards - 1, 0)));
   }
 
-  if (!mission) {
-    return null;
-  }
-
   return (
     <section className="mx-4">
       <MissionBoardHeader
-        title={mission.title}
-        currentLevel={mission.currentLevel}
-        totalLevels={mission.totalLevels}
-        missionProgress={mission.progress}
+        title={missionTitle}
+        currentLevel={currentLevel}
+        totalLevels={totalLevels}
+        missionProgress={missionProgress}
         answeredCount={answeredCount}
         totalCards={totalCards}
       />

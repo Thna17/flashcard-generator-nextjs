@@ -11,7 +11,7 @@ type DashboardHeaderProps = {
 
 export function DashboardHeader({
   query = "",
-  playerName = "THNA",
+  playerName = "PLAYER",
   brand = "FLASHGEN",
   searchPlaceholder = "SEARCH_DECKS...",
   actionPath = "/",

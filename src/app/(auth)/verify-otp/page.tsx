@@ -1,6 +1,9 @@
 "use client"
 
-import type { FormEvent } from "react"
+import { useState, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
+
+import { createClient } from "@/lib/supabase/client"
 
 import { AuthDivider } from "@/components/features/auth/auth-divider"
 import { AuthField } from "@/components/features/auth/auth-field"
@@ -10,18 +13,41 @@ import { AuthPanel } from "@/components/features/auth/auth-panel"
 import { Shell } from "@/components/layout/shell"
 import { Button } from "@/components/ui/button"
 
-const handleVerifyOtp = async (event: FormEvent<HTMLFormElement>) => {
-  event.preventDefault()
-  const formData = new FormData(event.currentTarget)
-  const email = String(formData.get("email") || "")
-  const token = String(formData.get("token") || "")
-
-  if (!email || !token) return
-
-  // TODO: use createClient() and supabase.auth.verifyOtp({ email, token, type: "email" })
-}
-
 export default function VerifyOtp() {
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [status, setStatus] = useState<{ type: "idle" | "error"; message: string }>({
+    type: "idle",
+    message: "",
+  })
+
+  const handleVerifyOtp = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const email = String(formData.get("email") || "").trim()
+    const token = String(formData.get("token") || "").trim()
+
+    if (!email || !token) return
+
+    setIsSubmitting(true)
+    setStatus({ type: "idle", message: "" })
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: "email",
+    })
+
+    if (error) {
+      setStatus({ type: "error", message: error.message })
+      setIsSubmitting(false)
+      return
+    }
+
+    router.push("/")
+  }
+
   return (
     <Shell>
       <AuthHero />
@@ -47,6 +73,12 @@ export default function VerifyOtp() {
             }}
           />
           <Button type="submit" variant="cta" size="cta">Verify Code</Button>
+          {status.type === "error" ? (
+            <p className="text-sm font-medium text-red-600">{status.message}</p>
+          ) : null}
+          {isSubmitting ? (
+            <p className="text-xs text-slate-600">Verifying code...</p>
+          ) : null}
         </form>
       </AuthPanel>
 
