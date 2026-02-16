@@ -4,6 +4,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -47,7 +53,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -121,5 +127,47 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .auth-card {
+    @apply  border-4 border-black bg-white shadow-[8px_8px_0px_#000];
+  }
+
+  .auth-panel {
+    @apply  border-4 border-black bg-white shadow-[8px_8px_0px_#000];
+  }
+
+  .auth-field {
+    @apply  border-2 border-slate-200 px-5 py-4 shadow-[inset_0_0_0_1px_#fff];
+  }
+
+  .auth-field-label {
+    @apply text-xs font-semibold uppercase tracking-[0.3em] text-slate-600;
+  }
+
+  .auth-field-input {
+    @apply w-full border-b-2 border-slate-700 bg-transparent pb-1 text-base font-medium text-slate-900 outline-none placeholder:text-slate-400 focus:border-orange-500;
+  }
+
+  .auth-input-shell {
+    @apply flex items-center gap-2 text-sm text-slate-500;
+  }
+
+  .auth-bracket {
+    @apply inline-flex h-6 w-6 items-center justify-center  border border-slate-300 bg-white text-xs font-semibold text-slate-500;
+  }
+
+  .auth-divider {
+    @apply h-1 w-full max-w-2xl bg-black ;
+  }
+
+  .auth-sound {
+    @apply border-2 border-white/15 bg-white/10  text-white/90  transition;
+  }
+
+  .auth-sound-icon {
+    @apply flex h-5 w-5 items-center justify-center  border border-white/10 bg-white/15 text-white;
   }
 }
