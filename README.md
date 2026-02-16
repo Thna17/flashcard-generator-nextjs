@@ -1,77 +1,225 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flash Card Generator
 
-## Getting Started
+A full-stack flashcard platform built with **Next.js 16**, **Supabase Auth**, and **Drizzle ORM**.  
+Users can create decks, manage cards, study in mission mode, and track study performance with persisted session scores.
 
-First, run the development server:
+## Table of Contents
+- [Product Overview](#product-overview)
+- [Feature Set](#feature-set)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Data Model](#data-model)
+- [Environment Variables](#environment-variables)
+- [Local Setup](#local-setup)
+- [Database Workflow](#database-workflow)
+- [Auth Sync (Supabase to public.users)](#auth-sync-supabase-to-publicusers)
+- [Privacy & Authorization Rules](#privacy--authorization-rules)
+- [Command Reference](#command-reference)
+- [Deploy to Vercel](#deploy-to-vercel)
+- [Troubleshooting](#troubleshooting)
+- [Study Reference](#study-reference)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Product Overview
+Flash Card Generator focuses on:
+- Personal deck and card management
+- Public/private content visibility
+- Interactive study mode (`CHECK` / `MISS`)
+- Persistent score summaries for progress tracking
+
+The app uses server-side auth checks and DB ownership checks for every protected write operation.
+
+## Feature Set
+### Authentication
+- Sign up, login, verify OTP, password reset
+- Session-aware protected pages
+
+### Dashboard
+- Dynamic user greeting
+- `TOTAL DECKS` and `TOTAL CARDS`
+- Separate sections:
+  - `MY DECKS (OWNED)`
+  - `PUBLIC DECKS (COMMUNITY)`
+
+### Deck Management
+- Create, update, delete deck
+- Privacy toggle (`private` / `public`)
+
+### Card Management
+- Add card to deck
+- Edit and delete cards in place
+
+### Study Player
+- Flip front/back card
+- Mark `CHECK` or `MISS`
+- Session summary with persisted score
+
+## Architecture
+High-level request flow:
+1. User interacts with UI (form/button).
+2. Server Action or Server Component validates auth via Supabase.
+3. Backend verifies ownership/privacy rules.
+4. Drizzle performs typed SQL operations.
+5. UI redirects with status/error query params for deterministic feedback.
+
+## Tech Stack
+- **Frontend**: Next.js App Router, React 19, Tailwind CSS
+- **Backend**: Next.js Server Actions + Route Handlers
+- **Auth**: Supabase (`@supabase/ssr`, `@supabase/supabase-js`)
+- **Database**: PostgreSQL + Drizzle ORM
+- **Tooling**: ESLint, TypeScript, Drizzle Kit
+
+## Project Structure
+```text
+src/
+  app/
+    page.tsx                              # Dashboard (owned/public decks)
+    decks/
+      new/page.tsx                        # Create deck + card CRUD in same flow
+      [deckSlug]/edit/page.tsx            # Owner-only deck/card management
+    missions/
+      page.tsx                            # missions index redirect helper
+      [missionSlug]/page.tsx              # Study player
+      [missionSlug]/summary/page.tsx      # Summary + score persistence
+    (auth)/
+      login/page.tsx
+      signup/page.tsx
+      verify-otp/page.tsx
+      forgot-password/page.tsx
+      reset-password/page.tsx
+  db/
+    schema.ts                             # Drizzle schema + relations
+  lib/
+    mission-decks.ts                      # Deck resolution + public/private access
+    study-sessions.ts                     # Save/read latest scores
+    user-display-name.ts                  # Dynamic player name resolver
+    supabase/
+      server.ts
+      client.ts
+docs/
+  flash-card-generator-case-study.md      # Technical case-study notes
+scripts/
+  seed-decks.mjs                          # Seed sample decks/cards
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Data Model
+Main relations from `src/db/schema.ts`:
+- `users (id uuid)` -> `flash_card_deck.user_id`
+- `flash_card_deck.deck_id` -> `card.deck_id`
+- `flash_card_deck.deck_id` -> `study_session.deck_id`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This enforces:
+- one user has many decks
+- one deck has many cards
+- one deck has many study sessions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
+Create `.env.local`:
 
-## Drizzle ORM Setup
+```bash
+DATABASE_URL=postgres://...
+NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
+# optional
+DATABASE_SSL=disable
+```
 
-1. Copy `.env.example` values into `.env.local`.
-2. Set `DATABASE_URL` to your Supabase PostgreSQL connection string.
-3. Verify connectivity:
+## Local Setup
+```bash
+npm install
+npm run dev
+```
 
+Stable development mode:
+- `npm run dev` -> `next dev --webpack`
+
+Optional Turbopack mode:
+- `npm run dev:turbo` -> `next dev --turbopack`
+
+## Database Workflow
+Validate DB connection:
 ```bash
 npm run db:check
 ```
 
-4. Generate migration files from `src/db/schema.ts`:
-
+Generate migration files:
 ```bash
 npm run db:generate
 ```
 
-5. Apply migrations:
-
+Apply migrations:
 ```bash
 npm run db:migrate
 ```
 
-6. Open Drizzle Studio:
+Alternative direct push:
+```bash
+npm run db:push
+```
 
+Open schema browser:
 ```bash
 npm run db:studio
 ```
 
-## Supabase Auth User Sync (Recommended)
+Seed demo data:
+```bash
+npm run db:seed:decks
+```
 
-Use `auth.users` as the only authentication source, and keep app user data in `public.users`.
-
-Apply this SQL once in Supabase SQL Editor:
-
+## Auth Sync (Supabase to public.users)
+Run this SQL once in Supabase SQL editor:
 - `supabase/sql/001_users_from_auth.sql`
 
-What it does:
-- Auto-creates/updates `public.users` when users sign up in Supabase Auth.
-- Backfills missing `users` rows for existing auth users.
-- Enables RLS so users can only access their own user row.
+Purpose:
+- Synchronize `public.users` with `auth.users`
+- Backfill missing user rows
+- Keep app-side user queries consistent
 
-## Learn More
+## Privacy & Authorization Rules
+- **Private deck**
+  - Visible to owner only
+  - Editable/deletable by owner only
+- **Public deck**
+  - Visible to other users in community section
+  - Study allowed for non-owners
+  - Edit/delete still owner-only
 
-To learn more about Next.js, take a look at the following resources:
+## Command Reference
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start local dev server (webpack mode) |
+| `npm run dev:turbo` | Start local dev server (turbopack mode) |
+| `npm run lint` | ESLint checks |
+| `npx tsc --noEmit` | Type checking |
+| `npm run build` | Production build |
+| `npm run db:check` | Validate DB connection |
+| `npm run db:seed:decks` | Seed sample decks/cards |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy to Vercel
+1. Push repository to GitHub.
+2. Import the repo in Vercel.
+3. Set environment variables in Vercel:
+   - `DATABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+4. In Supabase Auth URL configuration, add:
+   - `https://<your-domain>/auth/callback`
+5. Deploy.
+6. Run DB migration/push if needed for target environment.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Troubleshooting
+- **Build fails fetching Google Fonts**
+  - Ensure CI/deploy environment can access `fonts.googleapis.com`
+  - Or migrate to local/self-hosted fonts
 
-## Deploy on Vercel
+- **Turbopack panic in local dev**
+  - Use stable mode: `npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **No decks/cards shown**
+  - Verify DB credentials and migration state
+  - Confirm `public.users` sync SQL has been applied
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Study Reference
+For project learning and code walkthrough, see:
+- `docs/flash-card-generator-case-study.md`
